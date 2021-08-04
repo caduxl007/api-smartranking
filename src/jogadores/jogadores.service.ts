@@ -26,14 +26,14 @@ export class JogadoresService {
     const jogadorEncontrado = await this.jogadorModel.findOne({ email }).exec();
 
     if (jogadorEncontrado) {
-      return await this.atualizar(jogadorEncontrado, criarJogadorDTO);
+      await this.atualizar(criarJogadorDTO);
     } else {
       this.criar(criarJogadorDTO);
     }
   }
 
   async consultarTodosJogadores(): Promise<Jogador[]> {
-    return this.jogadores;
+    return await this.jogadorModel.find().exec();
   }
 
   async consultarUmJogador(email: string): Promise<Jogador> {
@@ -56,29 +56,32 @@ export class JogadoresService {
     );
   }
 
-  private criar(criarJogadorDTO: CriarJogadorDTO): void {
-    const { nome, email, telefoneCelular } = criarJogadorDTO;
+  private async criar(criarJogadorDTO: CriarJogadorDTO): Promise<Jogador> {
+    const jogadorCriado = new this.jogadorModel(criarJogadorDTO);
+    return await jogadorCriado.save();
 
-    const jogador: Jogador = {
-      _id: uuid.v4(),
-      nome,
-      email,
-      telefoneCelular,
-      ranking: 'A',
-      posicaoRanking: 2,
-      urlFotoJogador: 'a',
-    };
+    // const { nome, email, telefoneCelular } = criarJogadorDTO;
 
-    this.logger.log(`criaJogadorDTO: ${JSON.stringify(jogador)}`);
-    this.jogadores.push(jogador);
+    // const jogador: Jogador = {
+    //   _id: uuid.v4(),
+    //   nome,
+    //   email,
+    //   telefoneCelular,
+    //   ranking: 'A',
+    //   posicaoRanking: 2,
+    //   urlFotoJogador: 'a',
+    // };
+
+    // this.logger.log(`criaJogadorDTO: ${JSON.stringify(jogador)}`);
+    // this.jogadores.push(jogador);
   }
 
-  private atualizar(
-    jogadorEncontrado: Jogador,
-    criarJogadorDTO: CriarJogadorDTO,
-  ): void {
-    const { nome } = criarJogadorDTO;
-
-    jogadorEncontrado.nome = nome;
+  private async atualizar(criarJogadorDTO: CriarJogadorDTO): Promise<Jogador> {
+    return await this.jogadorModel
+      .findOneAndUpdate(
+        { email: criarJogadorDTO.email },
+        { $set: criarJogadorDTO },
+      )
+      .exec();
   }
 }
