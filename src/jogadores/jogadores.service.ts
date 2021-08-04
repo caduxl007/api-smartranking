@@ -28,7 +28,7 @@ export class JogadoresService {
     if (jogadorEncontrado) {
       await this.atualizar(criarJogadorDTO);
     } else {
-      this.criar(criarJogadorDTO);
+      await this.criar(criarJogadorDTO);
     }
   }
 
@@ -37,9 +37,7 @@ export class JogadoresService {
   }
 
   async consultarUmJogador(email: string): Promise<Jogador> {
-    const jogadorEncontrado = this.jogadores.find(
-      (jogador) => jogador.email === email,
-    );
+    const jogadorEncontrado = await this.jogadorModel.findOne({ email }).exec();
 
     if (!jogadorEncontrado) {
       throw new NotFoundException(
@@ -51,9 +49,7 @@ export class JogadoresService {
   }
 
   async deletarJogador(email: string): Promise<void> {
-    this.jogadores = this.jogadores.filter(
-      (jogador) => jogador.email !== email,
-    );
+    return await this.jogadorModel.remove({ email }).exec();
   }
 
   private async criar(criarJogadorDTO: CriarJogadorDTO): Promise<Jogador> {
