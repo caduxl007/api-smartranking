@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AtualizarJogadorDTO } from './dtos/atualizar-jogador.dto';
 
 import { CriarJogadorDTO } from './dtos/criar-jogador.dto';
 import { Jogador } from './interfaces/jogador.interface';
@@ -38,7 +39,7 @@ export class JogadoresService {
 
   async atualizarJogador(
     _id: string,
-    criarJogadorDTO: CriarJogadorDTO,
+    atualizarJogadorDTO: AtualizarJogadorDTO,
   ): Promise<void> {
     const jogadorEncontrado = await this.jogadorModel.findOne({ _id }).exec();
 
@@ -47,7 +48,7 @@ export class JogadoresService {
     }
 
     await this.jogadorModel
-      .findOneAndUpdate({ _id }, { $set: criarJogadorDTO })
+      .findOneAndUpdate({ _id }, { $set: atualizarJogadorDTO })
       .exec();
   }
 

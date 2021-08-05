@@ -9,6 +9,7 @@ import {
   Param,
   Put,
 } from '@nestjs/common';
+import { AtualizarJogadorDTO } from './dtos/atualizar-jogador.dto';
 
 import { CriarJogadorDTO } from './dtos/criar-jogador.dto';
 import { Jogador } from './interfaces/jogador.interface';
@@ -30,10 +31,10 @@ export class JogadoresController {
   @Put('/:_id')
   @UsePipes(ValidationPipe)
   async atualizarJogador(
-    @Body() criaJogadorDTO: CriarJogadorDTO,
+    @Body() atualizarJogadorDTO: AtualizarJogadorDTO,
     @Param('_id', JogadoresValidacaoParametrosPipe) _id: string,
   ): Promise<void> {
-    await this.jogadoresService.atualizarJogador(_id, criaJogadorDTO);
+    await this.jogadoresService.atualizarJogador(_id, atualizarJogadorDTO);
   }
 
   @Get()
