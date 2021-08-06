@@ -9,9 +9,9 @@ import {
   Param,
   Put,
 } from '@nestjs/common';
-import { AtualizarJogadorDTO } from './dtos/atualizar-jogador.dto';
 
 import { CriarJogadorDTO } from './dtos/criar-jogador.dto';
+import { AtualizarJogadorDTO } from './dtos/atualizar-jogador.dto';
 import { Jogador } from './interfaces/jogador.interface';
 import { JogadoresService } from './jogadores.service';
 import { JogadoresValidacaoParametrosPipe } from './pipes/jogadores-validacao-parametros.pipe';
